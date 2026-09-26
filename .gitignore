@@ -1,0 +1,14 @@
+# Java
+*.class
+bin/
+out/
+target/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Environment files / secrets
+.env
