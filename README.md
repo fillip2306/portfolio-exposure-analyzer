@@ -1,44 +1,27 @@
 # Portfolio Exposure Analyzer
 
-Tool for analyzing portfolio exposure and overlap across stocks, funds and ETFs.
+Portfolio Exposure Analyzer er et verktøy for å analysere eksponering og overlapp i en investeringsportefølje på tvers av aksjer, fond og ETF-er.
 
-## Git Commands
+Målet er å avdekke skjult overlapp og konsentrasjonsrisiko ved å analysere de underliggende beholdningene i fond og ETF-er. Dette gjør det mulig å se hvor stor eksponering porteføljen faktisk har mot enkelte selskaper, sektorer og markeder.
 
-Check changes:
-```bash
-git status
-```
+## Planlagt funksjonalitet
 
-Add all changes:
-```bash
-git add .
-```
+- Importere beholdninger fra fond og ETF-er
+- Oppdage overlapp mellom flere fond og ETF-er
+- Beregne direkte og indirekte eksponering mot selskaper
+- Analysere sektor- og geografisk eksponering
+- Identifisere konsentrasjon i porteføljen
+- Simulere hvordan en ny investering påvirker porteføljens samlede eksponering
+- Visualisere eksponering og overlapp
 
-Commit:
-```bash
-git commit -m "message"
-```
+## Teknologi
 
-Get latest changes:
-```bash
-git pull
-```
+- Java
+- Spring Boot / REST API
+- SQL
+- React / TypeScript
+- Python for eventuell automatisert datainnhenting
 
-Push to GitHub:
-```bash
-git push
-```
+## Status
 
-View commit history:
-```bash
-git log --oneline
-```
-
-## Normal workflow
-
-```bash
-git add .
-git commit -m "message"
-git pull
-git push
-```
+Prosjektet er under utvikling. Første versjon fokuserer på import og behandling av ETF-beholdninger fra CSV-filer i Java.
