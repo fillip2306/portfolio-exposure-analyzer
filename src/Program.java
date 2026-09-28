@@ -2,17 +2,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import model.Fund;
 import model.Holding;
 import utils.CSVReader;
 
 public class Program {
 
     private final CSVReader csvReader;
-    private List<Holding> holdings;
+    private List<Fund> funds;
 
     public Program() {
         this.csvReader = new CSVReader();
-        this.holdings = new ArrayList<>();
+        this.funds = new ArrayList<>();
     }
 
     public void Run() {
@@ -33,7 +34,7 @@ public class Program {
             scanner.nextLine();
 
             switch (choice) {
-                case 1 -> importHoldings();
+                case 1 -> importFund();
                 case 2 -> showHoldings();
                 case 3 -> System.out.println("Avslutter program");
                 default -> System.out.println("Ugyldig valg.");
@@ -43,24 +44,34 @@ public class Program {
         scanner.close();
     }
 
-    private void importHoldings() {
+    private void importFund() {
+
         try {
-            holdings = csvReader.retrieveHoldings("data/IVV_holdings.csv");
+            Fund fund = csvReader.retrieveFund("data/IVV_holdings.csv");
+
+            funds.add(fund);
 
             System.out.println(
-                    "Fond importert. Antall holdings: " + holdings.size()
+                    "Fond importert: " + fund.getName() +
+                    " (" + fund.getHoldings().size() + " holdings)"
             );
 
         } catch (Exception e) {
             System.out.println(
-                    "Kunne ikke lese holdings: " + e.getMessage()
+                    "Kunne ikke lese fond: " + e.getMessage()
             );
         }
     }
 
     private void showHoldings() {
-        for (Holding holding : holdings) {
-            System.out.println(holding);
+
+        for (Fund fund : funds) {
+
+            System.out.println("\nFond: " + fund.getName());
+
+            for (Holding holding : fund.getHoldings()) {
+                System.out.println(holding);
+            }
         }
     }
 }
