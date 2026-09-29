@@ -12,3 +12,6 @@ target/
 
 # Environment files / secrets
 .env
+
+# Legg først til dette i .gitignore
+data/
