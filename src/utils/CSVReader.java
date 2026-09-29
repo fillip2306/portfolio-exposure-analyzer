@@ -19,7 +19,6 @@ public class CSVReader {
 
     try (Scanner scanner = new Scanner(file)) {
 
-        // Første linje inneholder navnet på fondet
         String fundName = scanner.nextLine();
 
         // Hopper over resten av informasjonen frem til holdings
@@ -35,8 +34,7 @@ public class CSVReader {
                 continue;
             }
 
-            String[] values =
-                    line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
             String ticker = values[0].replace("\"", "");
             String name = values[1].replace("\"", "");
