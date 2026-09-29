@@ -32,12 +32,11 @@ public class Program {
             System.out.println("\n--- Portfolio Exposure Analyzer ---");
             System.out.println("1: Importer fond fra CSV");
             System.out.println("2: Vis importerte holdings");
-            System.out.println("3: Avslutt");
+            System.out.println("3: Avslutt" + "\n");
 
             System.out.print("Velg: ");
 
             choice = scanner.nextInt();
-            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> importFund(scanner);
@@ -56,7 +55,7 @@ public class Program {
 
             List<String> files = listFiles("data");
 
-            System.out.println("Velg CSV-filen du vil importere:");
+            System.out.println("\n" + "Velg CSV-filen du vil importere:");
 
             for (int i = 0; i < files.size(); i++) {
                 System.out.println((i + 1) + ": " + files.get(i));
@@ -64,8 +63,6 @@ public class Program {
 
             System.out.print("Velg: ");
             int fileChoice = scanner.nextInt();
-            scanner.nextLine();
-
             if (fileChoice < 1 || fileChoice > files.size()) {
                 System.out.println("Ugyldig valg.");
                 return;
@@ -107,7 +104,7 @@ public class Program {
                     .map(Path::getFileName)
                     .map(Path::toString)
                     .sorted()
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (IOException e) {
             System.err.println("Error reading directory: " + e.getMessage());
             return new ArrayList<>();
