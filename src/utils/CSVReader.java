@@ -8,53 +8,130 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
 public class CSVReader {
 
-  public Fund retrieveFund(String filePath) throws Exception {
+    public Fund retrieveFund(String filePath) throws Exception {
 
-    List<Holding> allHoldings = new ArrayList<>();
+        List<Holding> allHoldings = new ArrayList<>();
 
-    File file = new File(filePath);
+        File file = new File(filePath);
 
-    try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(file)) {
 
-        String fundName = scanner.nextLine();
+            // Første linje inneholder navnet på fondet
+            String fundName = scanner.nextLine();
 
-        // Hopper over resten av informasjonen frem til holdings
-        for (int i = 0; i < 9; i++) {
-            scanner.nextLine();
-        }
+            String headerLine = null;
 
-        while (scanner.hasNextLine()) {
+            // Finner linjen som inneholder kolonnenavnene
+            while (scanner.hasNextLine()) {
 
-            String line = scanner.nextLine();
+                String line = scanner.nextLine();
 
-            if (line.isBlank()) {
-                continue;
+                if (line.startsWith("Ticker,Name")) {
+                    headerLine = line;
+                    break;
+                }
             }
 
-            String[] values = line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+            // Hvis vi ikke finner headeren, kan ikke CSV-filen leses
+            if (headerLine == null) {
+                throw new IllegalArgumentException(
+                    "Fant ikke kolonneoverskriftene i CSV-filen."
+                );
+            }
 
-            String ticker = values[0].replace("\"", "");
-            String name = values[1].replace("\"", "");
-            String sector = values[2].replace("\"", "");
-            double weight =
-                    Double.parseDouble(values[5].replace("\"", ""));
-            String location = values[9].replace("\"", "");
+            String[] headers =
+                headerLine.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
 
-            Holding holding = new Holding(
+            // -1 betyr at kolonnen ikke er funnet enda
+            int tickerIndex = -1;
+            int nameIndex = -1;
+            int sectorIndex = -1;
+            int weightIndex = -1;
+            int locationIndex = -1;
+
+            // Finner plasseringen til kolonnene vi trenger
+            for (int i = 0; i < headers.length; i++) {
+
+                String header = headers[i]
+                    .replace("\"", "")
+                    .trim();
+
+                switch (header) {
+                    case "Ticker" ->
+                        tickerIndex = i;
+
+                    case "Name" ->
+                        nameIndex = i;
+
+                    case "Sector" ->
+                        sectorIndex = i;
+
+                    case "Weight (%)", "Market Weight" ->
+                        weightIndex = i;
+
+                    case "Location" ->
+                        locationIndex = i;
+                }
+            }
+
+            // Kontrollerer at alle nødvendige kolonner ble funnet
+            if (tickerIndex == -1 ||
+                nameIndex == -1 ||
+                sectorIndex == -1 ||
+                weightIndex == -1 ||
+                locationIndex == -1) {
+
+                throw new IllegalArgumentException(
+                    "CSV-filen mangler en eller flere nødvendige kolonner."
+                );
+            }
+
+            // Leser alle holdings
+            while (scanner.hasNextLine()) {
+
+                String line = scanner.nextLine();
+
+                if (line.isBlank()) {
+                    continue;
+                }
+
+                String[] values =
+                    line.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
+                String ticker =
+                    values[tickerIndex].replace("\"", "");
+
+                String name =
+                    values[nameIndex].replace("\"", "");
+
+                String sector =
+                    values[sectorIndex].replace("\"", "");
+
+                String weightValue =
+                        values[weightIndex].replace("\"", "").trim();
+
+                if (weightValue.equals("-")) {
+                    continue;
+                }
+
+                double weight = Double.parseDouble(weightValue);
+
+                String location =
+                    values[locationIndex].replace("\"", "");
+
+                Holding holding = new Holding(
                     ticker,
                     name,
                     sector,
                     weight,
                     location
-            );
+                );
 
-            allHoldings.add(holding);
+                allHoldings.add(holding);
+            }
+
+            return new Fund(fundName, allHoldings);
         }
-
-        return new Fund(fundName, allHoldings);
     }
-}
 }

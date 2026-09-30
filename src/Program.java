@@ -103,6 +103,7 @@ public class Program {
         try (Stream<Path> stream = Files.list(Paths.get(directoryPath))) {
             return stream
                     .filter(file -> !Files.isDirectory(file))
+                    .filter(file -> file.toString().endsWith(".csv"))
                     .map(Path::getFileName)
                     .map(Path::toString)
                     .sorted()

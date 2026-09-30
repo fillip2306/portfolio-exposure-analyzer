@@ -14,19 +14,19 @@ public class OverlapAnalyzer {
 
     public void showOverlap() {
 
-        System.out.println("--- Overlapp av selskaper ---");
+        System.out.println("\n" + "--- Overlapp av selskaper ---" + "\n");
 
         for (var holding1 : fund1.getHoldings()) {
             for (var holding2 : fund2.getHoldings()) {
 
                 if (holding1.getTicker().equals(holding2.getTicker())) {
 
-                    System.out.println("\n" + holding1.getName());
+                    System.out.println("\n" + "Selskap: " + holding1.getName() + "\n");
                     System.out.println(
-                            fund1.getName() + ": " + holding1.getWeight() + "%"
+                        "Vektoverlapp: " + fund1.getName() + ": " + holding1.getWeight() + "%"
                     );
                     System.out.println(
-                            fund2.getName() + ": " + holding2.getWeight() + "%"
+                        "Vektoverlapp: " + fund2.getName() + ": " + holding2.getWeight() + "%"
                     );
                 }
             }
